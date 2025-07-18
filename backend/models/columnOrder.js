@@ -11,11 +11,20 @@ export async function getColumnOrder(userId) {
     [userId]
   );
   if (!rows.length) return null;
-  return JSON.parse(rows[0].field_order);
+
+  const stored = rows[0].field_order;
+  if (typeof stored === 'string') {
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return stored.split(',');
+    }
+  }
+  return stored;
 }
 
 /**
- * Upsert the column order for a given user.
+ * Upsert (insert or update) the column order for a given user.
  * orderArray should be an array of fieldKey strings.
  */
 export async function setColumnOrder(userId, orderArray) {
@@ -23,8 +32,8 @@ export async function setColumnOrder(userId, orderArray) {
   await db.query(
     `INSERT INTO column_orders (user_id, field_order)
      VALUES (?, ?)
-     ON DUPLICATE KEY UPDATE field_order = ?`,
-    [userId, json, json]
+     ON DUPLICATE KEY UPDATE field_order = VALUES(field_order)`,
+    [userId, json]
   );
   return orderArray;
 }

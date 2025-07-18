@@ -3,86 +3,124 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard | NayaPM</title>
-  <link href="/css/styles.css" rel="stylesheet">
+  <title>NayaPM • Dashboard</title>
+
+  <!-- Nayatel theme + Bootstrap -->
+  <link rel="stylesheet" href="/css/styles.css" />
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
-  >
+  />
 </head>
 <body class="bg-light">
-  <!-- NAVBAR -->
+
+  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container">
-      <!-- Dummy Typographic Logo -->
       <a class="navbar-brand text-primary fw-bold" href="#">NayaPM</a>
-
       <button
         class="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
-        data-bs-target="#mainNav"
-        aria-controls="mainNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+        data-bs-target="#navMenu"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-
-      <div class="collapse navbar-collapse" id="mainNav">
-        <!-- Left‑side nav items -->
+      <div class="collapse navbar-collapse" id="navMenu">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" href="/dashboard.html">Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/projects.html">Projects</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/reports.html">Reports</a>
-          </li>
+          <li class="nav-item"><a class="nav-link active" href="/dashboard.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="/projects.html">Projects</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
         </ul>
-
-        <!-- Right‑side profile dropdown -->
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle d-flex align-items-center"
-              href="#"
-              id="profileDropdown"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <img
-                src="https://via.placeholder.com/32"
-                alt="Profile"
-                class="rounded-circle me-2 profile-icon"
-              >
-              <span>User</span>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-              <li><a class="dropdown-item" href="/profile.html">Profile</a></li>
-              <li><a class="dropdown-item" href="/settings.html">Settings</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logout">Logout</a></li>
-            </ul>
-          </li>
-        </ul>
+        <div class="dropdown">
+          <a
+            class="d-flex align-items-center text-decoration-none dropdown-toggle"
+            href="#"
+            id="userMenu"
+            data-bs-toggle="dropdown"
+          >
+            <img
+              src="/images/profile-placeholder.svg"
+              alt="Profile"
+              width="32"
+              height="32"
+              class="rounded-circle me-2"
+            />
+            <span class="text-dark">Username</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </nav>
 
-  <!-- Main dashboard content -->
-  <div class="container my-4">
-    <h2 class="mb-3">Project Status Overview</h2>
-    <div id="echart-status" style="height:400px;"></div>
+  <!-- Main Content -->
+  <div class="container my-5">
+    <!-- KPI Cards -->
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h6 class="text-muted">Active Projects</h6>
+          <h2 class="mt-2">12</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h6 class="text-muted">Pending Reports</h6>
+          <h2 class="mt-2">3</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 text-center">
+          <h6 class="text-muted">Total Budget</h6>
+          <h2 class="mt-2">$150K</h2>
+        </div>
+      </div>
+    </div>
+
+    <!-- Projects Overview Chart -->
+    <div class="card mt-5 p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="mb-0">Projects Overview</h5>
+      </div>
+      <div id="projectsChart" style="height: 400px;"></div>
+    </div>
   </div>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
-  <script src="/js/dashboard.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+  <script>
+    // Initialize ECharts instance
+    const chartDom = document.getElementById('projectsChart');
+    const projectsChart = echarts.init(chartDom);
+    const option = {
+      title: { text: 'Projects by Status', left: 'center' },
+      tooltip: { trigger: 'item' },
+      legend: { bottom: 10, left: 'center' },
+      series: [
+        {
+          name: 'Status',
+          type: 'pie',
+          radius: '60%',
+          data: [
+            { value: 8, name: 'In Progress' },
+            { value: 2, name: 'Completed' },
+            { value: 2, name: 'On Hold' }
+          ],
+          emphasis: {
+            itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0,0,0,0.2)' }
+          }
+        }
+      ]
+    };
+    projectsChart.setOption(option);
+  </script>
 </body>
 </html>
 

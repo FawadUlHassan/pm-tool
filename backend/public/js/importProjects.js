@@ -1,20 +1,20 @@
 console.log('✅ importProjects.js loaded');
 
 document.addEventListener('DOMContentLoaded', () => {
-  const importModal = new bootstrap.Modal('#importProjectsModal');
+  // ← Pass the actual element here:
+  const importModal = new bootstrap.Modal(document.getElementById('importProjectsModal'));
   const csvInput    = document.getElementById('projectsCsvInput');
   const mappingsEl  = document.getElementById('csvMappings');
   const previewEl   = document.getElementById('csvPreview');
 
-  document.getElementById('btnImportProjects')
-    .addEventListener('click', () => {
-      document.getElementById('importProjectsForm').reset();
-      document.getElementById('csvMappingContainer').style.display = 'none';
-      mappingsEl.innerHTML = '';
-      previewEl.querySelector('thead').innerHTML = '';
-      previewEl.querySelector('tbody').innerHTML = '';
-      importModal.show();
-    });
+  document.getElementById('btnImportProjects').addEventListener('click', () => {
+    document.getElementById('importProjectsForm').reset();
+    document.getElementById('csvMappingContainer').style.display = 'none';
+    mappingsEl.innerHTML = '';
+    previewEl.querySelector('thead').innerHTML = '';
+    previewEl.querySelector('tbody').innerHTML = '';
+    importModal.show();
+  });
 
   csvInput.addEventListener('change', e => {
     const file = e.target.files[0];

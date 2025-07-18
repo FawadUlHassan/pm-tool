@@ -1,9 +1,11 @@
+// public/js/fields.js
 console.log('✅ fields.js loaded');
 
 document.addEventListener('DOMContentLoaded', () => {
-  const fieldsModal   = new bootstrap.Modal('#fieldsModal');
-  const addFieldModal = new bootstrap.Modal('#addFieldModal');
-  const importModal   = new bootstrap.Modal('#importFieldsModal');
+  // instantiate with element references
+  const fieldsModal   = new bootstrap.Modal(document.getElementById('fieldsModal'));
+  const addFieldModal = new bootstrap.Modal(document.getElementById('addFieldModal'));
+  const importModal   = new bootstrap.Modal(document.getElementById('importFieldsModal'));
 
   document.getElementById('btnManageFields')
     .addEventListener('click', async () => {
