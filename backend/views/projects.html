@@ -20,22 +20,24 @@
   </nav>
 
   <div class="container my-4">
-    <!-- Header & Action Buttons -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2>Projects</h2>
-      <div>
-        <button id="btnImportProjects" class="btn btn-outline-secondary me-2">
-          Import Projects
-        </button>
-        <button id="btnManageFields" class="btn btn-outline-secondary me-2">
-          Manage Fields
-        </button>
-        <button id="btnAddProject" class="btn btn-primary">
-          + Add Project
-        </button>
-      </div>
+  <!-- Header & Action Buttons -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Projects</h2>
+    <div>
+      <button id="btnDeleteSelected" class="btn btn-danger me-2" disabled>
+        Delete Selected
+      </button>
+      <button id="btnImportProjects" class="btn btn-outline-secondary me-2">
+        Import Projects
+      </button>
+      <button id="btnManageFields" class="btn btn-outline-secondary me-2">
+        Manage Fields
+      </button>
+      <button id="btnAddProject" class="btn btn-primary">
+        + Add Project
+      </button>
     </div>
-
+  </div>
     <!-- Projects Table -->
     <table id="projectsTable" class="table table-striped">
       <thead><tr id="projectsHeader"></tr></thead>
@@ -259,7 +261,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

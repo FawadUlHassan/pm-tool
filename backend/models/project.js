@@ -45,3 +45,22 @@ export async function bulkCreateProjects(dataList) {
   await db.query('INSERT INTO projects (data) VALUES ?', [values]);
   return getAllProjects();
 }
+
+/**
+ * Fetch one project by ID
+ */
+export async function getProjectById(id) {
+  const [rows] = await db.query(
+    'SELECT id, data FROM projects WHERE id = ?',
+    [id]
+  );
+  if (!rows.length) return null;
+
+  const row = rows[0];
+  // r.data may already be parsed
+  const projData = (typeof row.data === 'string')
+    ? JSON.parse(row.data)
+    : row.data;
+
+  return { id: row.id, ...projData };
+}
