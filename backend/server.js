@@ -18,6 +18,8 @@ function ensureAuthenticated(req, res, next) {
   return res.redirect('/');
 }
 
+import fieldsRoutes from './routes/fields.js';
+
 // Body parsers
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -29,6 +31,14 @@ app.use('/', authRoutes);
 app.use('/css', express.static(path.join(process.cwd(), 'public/css')));
 app.use('/js',  express.static(path.join(process.cwd(), 'public/js')));
 app.use('/', authRoutes);    // '/', '/login', '/signup', '/logout'
+
+// PROTECTED API: Field definitions
+app.use('/api/fields', fieldsRoutes);
+
+import projectsRoutes from './routes/projects.js';
+
+// … after your fieldsRoutes and before the 404 handler…
+app.use('/api/projects', projectsRoutes);
 
 // ————————————————————————————————————————————————
 // PROTECTION LAYER: everything below this line
@@ -46,6 +56,16 @@ app.use((req, res, next) => {
 // Protected: only reachable when logged in
 app.get('/dashboard.html', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'views/dashboard.html'));
+});
+
+// Protected: Projects page
+app.get('/projects.html', (req, res) => {
+  res.sendFile(path.join(process.cwd(), 'views/projects.html'));
+});
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: err.message });
 });
 
 // 404 fallback

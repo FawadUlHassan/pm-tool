@@ -94,7 +94,7 @@ a:hover {
 
 /* Optional: subtle background pattern like Nayatel’s */
 body {
-  background-image: url('/css/bg-pattern.svg');
+/*  background-image: url('/css/bg-pattern.svg'); */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

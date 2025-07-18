@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects | NayaPM</title>
+  <link href="/css/styles.css" rel="stylesheet">
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  >
+</head>
+<body class="bg-light">
+  <!-- Reuse your Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container">
+      <a class="navbar-brand text-primary fw-bold" href="#">NayaPM</a>
+      <!-- ... your toggler, nav-links, profile dropdown ... -->
+    </div>
+  </nav>
+
+  <div class="container my-4">
+    <!-- Header & Action Buttons -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>Projects</h2>
+      <div>
+        <button id="btnImportProjects" class="btn btn-outline-secondary me-2">
+          Import Projects
+        </button>
+        <button id="btnManageFields" class="btn btn-outline-secondary me-2">
+          Manage Fields
+        </button>
+        <button id="btnAddProject" class="btn btn-primary">
+          + Add Project
+        </button>
+      </div>
+    </div>
+
+    <!-- Projects Table -->
+    <table id="projectsTable" class="table table-striped">
+      <thead><tr id="projectsHeader"></tr></thead>
+      <tbody id="projectsBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Add / Edit Project Modal -->
+  <div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <form id="projectForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Project</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="projectFormFields">
+            <!-- Dynamic inputs go here -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+    <!-- Import Projects Modal -->
+  <div class="modal fade" id="importProjectsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form id="importProjectsForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Import Projects (CSV)</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Upload CSV File</label>
+              <input
+                id="projectsCsvInput"
+                type="file"
+                accept=".csv"
+                class="form-control"
+                required
+              >
+            </div>
+            <div id="csvMappingContainer" style="display:none;">
+              <p>Map CSV columns to your project fields:</p>
+              <div id="csvMappings" class="row gy-2"></div>
+              <p class="mt-3">Preview:</p>
+              <table class="table table-sm" id="csvPreview">
+                <thead></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Import Projects
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+    <!-- Fields Management Modal -->
+  <div class="modal fade" id="fieldsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Manage Fields</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <button id="btnAddField" class="btn btn-primary me-2">
+                + Add Field
+              </button>
+              <button id="btnImportFields" class="btn btn-outline-secondary">
+                Import Fields
+              </button>
+	      <button id="btnImportFieldsCsv" class="btn btn-outline-secondary">Import Fields (CSV)</button>
+            </div>
+          </div>
+          <table id="fieldsTable" class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Label</th>
+                <th>Type</th>
+                <th>Options</th>
+                <th>Order</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Field Modal -->
+  <div class="modal fade" id="addFieldModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="addFieldForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Field</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Field Key</label>
+              <input name="fieldKey" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Label</label>
+              <input name="label" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Type</label>
+              <select name="type" class="form-select" required>
+                <option value="">Select type</option>
+                <option value="number">Number</option>
+                <option value="text">Text</option>
+                <option value="dropdown">Dropdown</option>
+                <option value="multi-select">Multi‑select</option>
+                <option value="date">Date</option>
+                <option value="time">Time</option>
+              </select>
+            </div>
+            <div class="mb-3" id="fieldOptionsContainer" style="display:none;">
+              <label class="form-label">Options (value:label per line)</label>
+              <textarea name="options" class="form-control" rows="4" placeholder="e.g. red:Red"></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Sort Order</label>
+              <input name="sortOrder" type="number" class="form-control" value="0">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Save Field
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Fields Modal -->
+  <div class="modal fade" id="importFieldsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form id="importFieldsForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Import Fields (JSON)</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p>Paste a JSON array of field definitions:</p>
+            <textarea name="json" class="form-control" rows="8" placeholder='[{"fieldKey":"status","label":"Status","type":"dropdown","options":[{"value":"open","label":"Open"}]}]'></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Import
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+    <!-- Import Fields from CSV Modal -->
+  <div class="modal fade" id="importFieldsCsvModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <form id="importFieldsCsvForm">
+          <div class="modal-header">
+            <h5 class="modal-title">Import Fields (CSV)</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <!-- 1. Upload CSV -->
+            <div class="mb-3">
+              <label class="form-label">Upload CSV File</label>
+              <input id="fieldsCsvInput" type="file" accept=".csv" class="form-control" required>
+            </div>
+            <!-- 2. Mapping UI -->
+            <div id="fieldsCsvMappingContainer" style="display:none;">
+              <p>Define each CSV column as a Field:</p>
+              <div id="fieldsCsvMappings" class="row gy-3"></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Import Fields
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <script src="/js/projects.js"></script>
+  <script src="/js/fields.js"></script>
+  <script src="/js/importFieldsCsv.js"></script>
+  <script src="/js/importProjects.js"></script>
+</body>
+</html>
+
