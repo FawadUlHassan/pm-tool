@@ -68,7 +68,17 @@ a:hover {
 }
 
 /* Centering the card vertically/horizontally */
+/*
 .container {
+  min-height: 100vh;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+*/
+
+/* login‑only centering */
+.login-container {
   min-height: 100vh;
   display: flex !important;
   align-items: center;
@@ -88,5 +98,28 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+
+/* Navbar tweaks */
+.navbar-brand {
+  font-size: 1.5rem;
+  letter-spacing: 0.05rem;
+}
+
+.nav-link {
+  color: var(--text-color);
+  transition: color 0.2s;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  color: var(--brand-primary);
+}
+
+.profile-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
 }
 
